@@ -1,0 +1,421 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>AudioTester</title><meta name="generator" content="MATLAB 8.4"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2015-03-04"><meta name="DC.source" content="AudioTester.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><pre class="codeinput"><span class="comment">%{
+</span><span class="comment">    Name:       AudioTester
+</span><span class="comment">    Desc:       Compares the input file with the calculated wav files from
+</span><span class="comment">                AudioGraph and checks for a match using comparison
+</span><span class="comment">                techniques.
+</span><span class="comment">
+</span><span class="comment">    Author:     Christopher Simon
+</span><span class="comment">    Version:    1.0
+</span><span class="comment">
+</span><span class="comment">    Created:    3/3/2015
+</span><span class="comment">    Modified:   3/3/2015
+</span><span class="comment">%}
+</span><span class="keyword">function</span> AudioTester(fileName)
+    <span class="comment">% Prompt for the input filename if one was not provided as a parameter</span>
+    <span class="keyword">if</span> fileName == false
+        fileName = input(<span class="string">'Please input the name of the file to test: '</span>, <span class="string">'s'</span>);
+    <span class="keyword">end</span>
+    fprintf(<span class="string">'\n'</span>);
+
+    <span class="comment">% Read the wav file into a data array</span>
+    [audioData, ~] = audioread(fileName);
+    <span class="comment">% Get the values of the audioData as an array of vars</span>
+    audioVars = calculate(audioData);
+
+    <span class="comment">% For each calculated wav file (eight, nine, zero) as iteration i</span>
+    <span class="keyword">for</span> i = 1:3
+        <span class="comment">% Set the current matFile and respective nbLabel</span>
+        <span class="comment">% to the corresponding values in the case list</span>
+        <span class="keyword">switch</span> i
+            <span class="keyword">case</span> 1
+                matFile = <span class="string">'eight.mat'</span>;
+                nbLabel = <span class="string">'EIGHT'</span>;
+            <span class="keyword">case</span> 2
+                matFile = <span class="string">'nine.mat'</span>;
+                nbLabel = <span class="string">'NINE'</span>;
+            <span class="keyword">case</span> 3
+                matFile = <span class="string">'zero.mat'</span>;
+                nbLabel = <span class="string">'ZERO'</span>;
+        <span class="keyword">end</span>
+
+        <span class="comment">% Print the current matFile name</span>
+        fprintf(<span class="string">'%s\n'</span>, matFile);
+
+        <span class="comment">% Compare each var from the input audio file to each matFile</span>
+        boolean = compare(audioVars, matFile);
+
+        <span class="comment">% Print the final conclusion of the current comparision</span>
+        <span class="comment">% If at least on of the test fails, then that file does NOT match</span>
+        <span class="keyword">if</span>(boolean == true)
+            notMessage = <span class="string">'is'</span>;
+
+            <span class="comment">% A match was found! Indicate so in the .dat file</span>
+            save(<span class="string">'voiceReceived.dat'</span>, <span class="string">'nbLabel'</span>, <span class="string">'-ascii'</span>, <span class="string">'-append'</span>);
+        <span class="keyword">else</span>
+            notMessage = <span class="string">'is NOT'</span>;
+        <span class="keyword">end</span>
+
+        <span class="comment">% Format and print the final conclusion</span>
+        message = <span class="string">'The voice in %s %s %s!\n\n'</span>;
+        fprintf(message, fileName, notMessage, nbLabel);
+    <span class="keyword">end</span>
+
+<span class="comment">%{
+</span><span class="comment">    Calculate the data from a given array
+</span><span class="comment">%}
+</span><span class="keyword">function</span> audioVars = calculate(audioData)
+    <span class="comment">% Mean</span>
+    me = mean(audioData);
+    <span class="comment">% Standard Deviation</span>
+    de = std(audioData);
+    <span class="comment">% Variance</span>
+    va = std(audioData) .^ 2;
+    <span class="comment">% Average Power</span>
+    ap = mean(audioData .^ 2);
+    <span class="comment">% Average Magnitude</span>
+    am = mean(abs(audioData));
+    <span class="comment">% Return an array of calculation vars</span>
+    audioVars = [me, de, va, ap, am];
+
+<span class="comment">%{
+</span><span class="comment">    Given a value, x, and a percent variance, p,
+</span><span class="comment">    Return an array of variance values including
+</span><span class="comment">    the original, low and high percent ranges
+</span><span class="comment">%}
+</span><span class="keyword">function</span> range = percent(x, p)
+    <span class="comment">% Get the percent variance or</span>
+    <span class="comment">% offset of the original value, x</span>
+    offset = x/p;
+    <span class="comment">% Return the range including the</span>
+    <span class="comment">% original, low, and high offset ranges</span>
+    range = [x, (x - offset), (x + offset)];
+
+<span class="comment">%{
+</span><span class="comment">    Compare the values the audio array to the designated matFile
+</span><span class="comment">%}
+</span><span class="keyword">function</span> boolean = compare(audioVars, matFile)
+    <span class="comment">% For each var in audioVars as iteration i</span>
+    <span class="keyword">for</span> i = 1:length(audioVars)
+        <span class="comment">% Load the current var from the matFile based on the case list</span>
+        <span class="comment">% Then calculate the percent offset for each of those vars</span>
+        <span class="keyword">switch</span> i
+            <span class="keyword">case</span> 1
+                load(matFile, <span class="string">'me'</span>);
+                var = percent(me, 5);
+                varLabel = <span class="string">'Mean'</span>;
+            <span class="keyword">case</span> 2
+                load(matFile, <span class="string">'de'</span>);
+                var = percent(de, 10);
+                varLabel = <span class="string">'Deviation'</span>;
+            <span class="keyword">case</span> 3
+                load(matFile, <span class="string">'va'</span>);
+                var = percent(va, 8);
+                varLabel = <span class="string">'Variance'</span>;
+            <span class="keyword">case</span> 4
+                load(matFile, <span class="string">'ap'</span>);
+                var = percent(ap, 8);
+                varLabel = <span class="string">'Power'</span>;
+            <span class="keyword">case</span> 5
+                load(matFile, <span class="string">'am'</span>);
+                var = percent(am, 10);
+                varLabel = <span class="string">'Magnitude'</span>;
+        <span class="keyword">end</span>
+
+        <span class="comment">% Get the high and low offsets from the percentage calculation of</span>
+        <span class="comment">% the current var</span>
+        offsetLow = var(2);
+        offsetHigh = var(3);
+        <span class="comment">% Is the current audioVars(i) within the range of the two offset values?</span>
+        currentVar = audioVars(i);
+        boolean = isBetween(currentVar, offsetLow, offsetHigh);
+
+        <span class="comment">% Modify the message content based on the validity of the statements</span>
+        <span class="keyword">if</span>(boolean == true)
+            notMessage = <span class="string">'is'</span>;
+        <span class="keyword">else</span>
+            notMessage = <span class="string">'is NOT'</span>;
+            boolean = false;
+        <span class="keyword">end</span>
+
+        <span class="comment">% Print the current var message</span>
+        message = <span class="string">'%s: %+2.5f %s within %+2.5f and %+2.5f\n'</span>;
+        fprintf(message, varLabel, currentVar, notMessage, offsetLow, offsetHigh);
+    <span class="keyword">end</span>
+
+<span class="comment">%{
+</span><span class="comment">    Check if number, n, is in between two numbers, x and y
+</span><span class="comment">%}
+</span><span class="keyword">function</span> boolean = isBetween(n, x, y)
+    <span class="comment">% Start comparision based on the biger number</span>
+    <span class="keyword">if</span>(x &lt; y)
+        <span class="keyword">if</span>(n &gt;= x &amp;&amp; n &lt;= y)
+            boolean = true;
+        <span class="keyword">else</span>
+            boolean = false;
+        <span class="keyword">end</span>
+    <span class="keyword">else</span> <span class="comment">%(x &gt; y)</span>
+        <span class="keyword">if</span>(n &gt;= y &amp;&amp; n &lt;= x)
+            boolean = true;
+        <span class="keyword">else</span>
+            boolean = false;
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+</pre><pre class="codeoutput">
+eight.mat
+Mean: -0.00102 is within -0.00082 and -0.00123
+Deviation: +0.07712 is within +0.06941 and +0.08483
+Variance: +0.00595 is within +0.00520 and +0.00669
+Power: +0.00595 is within +0.00520 and +0.00669
+Magnitude: +0.03385 is within +0.03047 and +0.03724
+The voice in test1.wav is EIGHT!
+
+nine.mat
+Mean: -0.00102 is NOT within -0.00165 and -0.00247
+Deviation: +0.07712 is within +0.07171 and +0.08764
+Variance: +0.00595 is within +0.00555 and +0.00714
+Power: +0.00595 is within +0.00556 and +0.00715
+Magnitude: +0.03385 is NOT within +0.03911 and +0.04780
+The voice in test1.wav is NOT NINE!
+
+zero.mat
+Mean: -0.00102 is NOT within -0.00175 and -0.00262
+Deviation: +0.07712 is within +0.07521 and +0.09192
+Variance: +0.00595 is NOT within +0.00611 and +0.00786
+Power: +0.00595 is NOT within +0.00611 and +0.00786
+Magnitude: +0.03385 is NOT within +0.04100 and +0.05011
+The voice in test1.wav is NOT ZERO!
+
+</pre><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2014b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%{
+    Name:       AudioTester
+    Desc:       Compares the input file with the calculated wav files from
+                AudioGraph and checks for a match using comparison
+                techniques.
+
+    Author:     Christopher Simon
+    Version:    1.0
+
+    Created:    3/3/2015
+    Modified:   3/3/2015
+%}
+function AudioTester()
+    % Prompt for the input filename if one was not provided as a parameter
+    %if fileName == false
+     %   fileName = input('Please input the name of the file to test: ', 's');
+    %end
+    fprintf('\n');
+    fileName = 'test1.wav';
+    % Read the wav file into a data array
+    [audioData, ~] = audioread(fileName);
+    % Get the values of the audioData as an array of vars
+    audioVars = calculate(audioData);
+    
+    % For each calculated wav file (eight, nine, zero) as iteration i
+    for i = 1:3
+        % Set the current matFile and respective nbLabel
+        % to the corresponding values in the case list
+        switch i
+            case 1
+                matFile = 'eight.mat';
+                nbLabel = 'EIGHT';
+            case 2
+                matFile = 'nine.mat';
+                nbLabel = 'NINE';
+            case 3
+                matFile = 'zero.mat';
+                nbLabel = 'ZERO';
+        end
+        
+        % Print the current matFile name
+        fprintf('%s\n', matFile);
+        
+        % Compare each var from the input audio file to each matFile
+        boolean = compare(audioVars, matFile);
+        
+        % Print the final conclusion of the current comparision
+        % If at least on of the test fails, then that file does NOT match
+        if(boolean == true)
+            notMessage = 'is';
+            
+            % A match was found! Indicate so in the .dat file
+            save('voiceReceived.dat', 'nbLabel', '-ascii', '-append');
+        else
+            notMessage = 'is NOT';
+        end
+        
+        % Format and print the final conclusion
+        message = 'The voice in %s %s %s!\n\n';
+        fprintf(message, fileName, notMessage, nbLabel);
+    end
+        
+%{
+    Calculate the data from a given array
+%}
+function audioVars = calculate(audioData)
+    % Mean
+    me = mean(audioData);
+    % Standard Deviation
+    de = std(audioData);
+    % Variance
+    va = std(audioData) .^ 2;
+    % Average Power
+    ap = mean(audioData .^ 2);
+    % Average Magnitude
+    am = mean(abs(audioData));
+    % Return an array of calculation vars
+    audioVars = [me, de, va, ap, am];
+    
+%{
+    Given a value, x, and a percent variance, p,
+    Return an array of variance values including
+    the original, low and high percent ranges
+%}
+function range = percent(x, p)
+    % Get the percent variance or
+    % offset of the original value, x
+    offset = x/p;
+    % Return the range including the
+    % original, low, and high offset ranges
+    range = [x, (x - offset), (x + offset)];
+    
+%{
+    Compare the values the audio array to the designated matFile
+%}
+function boolean = compare(audioVars, matFile)
+    % For each var in audioVars as iteration i
+    for i = 1:length(audioVars)
+        % Load the current var from the matFile based on the case list
+        % Then calculate the percent offset for each of those vars
+        switch i
+            case 1
+                load(matFile, 'me');
+                var = percent(me, 5);
+                varLabel = 'Mean';
+            case 2
+                load(matFile, 'de');
+                var = percent(de, 10);
+                varLabel = 'Deviation';
+            case 3 
+                load(matFile, 'va');
+                var = percent(va, 8);
+                varLabel = 'Variance';
+            case 4
+                load(matFile, 'ap');
+                var = percent(ap, 8);
+                varLabel = 'Power';
+            case 5
+                load(matFile, 'am');
+                var = percent(am, 10);
+                varLabel = 'Magnitude';
+        end
+        
+        % Get the high and low offsets from the percentage calculation of
+        % the current var
+        offsetLow = var(2);
+        offsetHigh = var(3);
+        % Is the current audioVars(i) within the range of the two offset values?
+        currentVar = audioVars(i);
+        boolean = isBetween(currentVar, offsetLow, offsetHigh);
+        
+        % Modify the message content based on the validity of the statements
+        if(boolean == true)
+            notMessage = 'is';
+        else
+            notMessage = 'is NOT';
+            boolean = false;
+        end
+        
+        % Print the current var message
+        message = '%s: %+2.5f %s within %+2.5f and %+2.5f\n';
+        fprintf(message, varLabel, currentVar, notMessage, offsetLow, offsetHigh);
+    end
+
+%{
+    Check if number, n, is in between two numbers, x and y
+%}
+function boolean = isBetween(n, x, y)
+    % Start comparision based on the biger number
+    if(x < y)
+        if(n >= x && n <= y)
+            boolean = true;
+        else
+            boolean = false;
+        end
+    else %(x > y)
+        if(n >= y && n <= x)
+            boolean = true;
+        else
+            boolean = false;
+        end
+    end
+##### SOURCE END #####
+--></body></html>

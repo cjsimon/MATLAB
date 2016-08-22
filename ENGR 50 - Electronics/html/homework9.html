@@ -1,0 +1,212 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>homework9</title><meta name="generator" content="MATLAB 8.4"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2016-04-30"><meta name="DC.source" content="homework9.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#2">Close and Clear command and the workspace windows</a></li><li><a href="#3">Part 1: Wheatstone Bridge</a></li><li><a href="#4">Part 2: Semiconductor</a></li></ul></div><pre class="codeinput"><span class="comment">%{
+</span><span class="comment">    Christopher Simon
+</span><span class="comment">    HW 9: Wheatstone Bridge and Semiconductor
+</span><span class="comment">%}</span>
+</pre><h2>Close and Clear command and the workspace windows<a name="2"></a></h2><pre class="codeinput">clc;        <span class="comment">% Clear the console</span>
+clear;      <span class="comment">% Clear the workspace</span>
+close <span class="string">all</span>;  <span class="comment">% Close all windows</span>
+</pre><h2>Part 1: Wheatstone Bridge<a name="3"></a></h2><p>Resistor Values</p><pre class="codeinput">R1 = 120;
+R2 = 120;
+R3 = 250;
+R4 = 250;
+
+<span class="comment">% The variable resistance value</span>
+RV = linspace(0,500);
+
+<span class="comment">% Prompt for an input voltage</span>
+V = input(<span class="string">'Enter a battery voltage from 5 to 20 volts: '</span>);
+<span class="keyword">if</span>(V &lt; 5 || V &gt; 20)
+    error(<span class="string">'Please enter a value in between 5 and 20!'</span>);
+<span class="keyword">end</span>
+
+<span class="comment">% Calculate both voltages for the two different variables</span>
+Vab1 = V * ( (R2 ./ (RV + R2)) - (R4 ./ (R3 + R4)) ); <span class="comment">% Variable Resistor, R1</span>
+Vab2 = V * ( (RV ./ (R1 + RV)) - (R4 ./ (R3 + R4)) ); <span class="comment">% Variable Resistor, R2</span>
+
+<span class="comment">% Plot both variable resistor graphs vs the voltage across</span>
+<span class="comment">% NumberTitle off hides the Figure number in the window title</span>
+figure(<span class="string">'Name'</span>,<span class="string">'Variable Resistance'</span>,<span class="string">'NumberTitle'</span>,<span class="string">'off'</span>);
+subX = 2;
+subY = 1;
+subplot(subX, subY, 1); <span class="comment">% 2x1 Grid for Subplots. Subplot 1</span>
+plot(RV, Vab1);
+title(<span class="string">'Variable R1 vs Voltage across A and B'</span>);
+xlabel(<span class="string">'R1 (Ohms)'</span>);
+ylabel(<span class="string">'vAB (Volts)'</span>);
+
+subplot(subX, subY, 2); <span class="comment">% 2x1 Grid for Subplots. Subplot 2</span>
+plot(RV, Vab2);
+title(<span class="string">'Variable R2 vs Voltage across A and B'</span>);
+xlabel(<span class="string">'R2 (Ohms)'</span>);
+ylabel(<span class="string">'vAB (Volts)'</span>);
+</pre><pre class="codeoutput error">Error using input
+Cannot call INPUT from EVALC.
+
+Error in homework9 (line 22)
+V = input('Enter a battery voltage from 5 to 20 volts: ');
+</pre><h2>Part 2: Semiconductor<a name="4"></a></h2><p>Clear the console from part 1</p><pre class="codeinput">clc;
+Is = 10.^(-12);       <span class="comment">% Saturation Current</span>
+q = 1.6 .* 10.^(-19); <span class="comment">% Elementary Charge Value</span>
+k = 1.38 .*10^(-23);  <span class="comment">% Boltzmann&#8217;s Constant</span>
+
+<span class="comment">% Prompt for a voltage drop from the user</span>
+Vd = input(<span class="string">'Enter a voltage drop from 0.2 and 3.0 volts: '</span>);
+<span class="keyword">if</span>(Vd &lt; 0.2 || Vd &gt; 3.0)
+    error(<span class="string">'Please enter a value in between 0.2 and 3.0!'</span>);
+<span class="keyword">end</span>
+
+<span class="comment">% Calculate the current</span>
+[Vd, Y] = meshgrid(0:.025:Vd, 290:2:320);
+I = Is .* ((exp((q*Vd) ./ (k*Y)) - 1));
+
+<span class="comment">% Generate a 3D grid from the given values</span>
+figure(<span class="string">'Name'</span>,<span class="string">'Semiconductor'</span>,<span class="string">'NumberTitle'</span>,<span class="string">'off'</span>);
+mesh(Vd, Y, I);
+title(<span class="string">'Voltage Drop vs Temperature vs Current'</span>);
+xlabel(<span class="string">'Voltage Drop (Volts)'</span>);
+ylabel(<span class="string">'Temperature (Kelvin)'</span>);
+zlabel(<span class="string">'Current (Amps)'</span>);
+</pre><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2014b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%{
+    Christopher Simon
+    HW 9: Wheatstone Bridge and Semiconductor
+%}
+
+%% Close and Clear command and the workspace windows
+clc;        % Clear the console
+clear;      % Clear the workspace
+close all;  % Close all windows
+
+%% Part 1: Wheatstone Bridge
+% Resistor Values
+R1 = 120;     
+R2 = 120;
+R3 = 250;
+R4 = 250;
+
+% The variable resistance value
+RV = linspace(0,500);
+
+% Prompt for an input voltage
+V = input('Enter a battery voltage from 5 to 20 volts: ');
+if(V < 5 || V > 20)
+    error('Please enter a value in between 5 and 20!');
+end
+
+% Calculate both voltages for the two different variables
+Vab1 = V * ( (R2 ./ (RV + R2)) - (R4 ./ (R3 + R4)) ); % Variable Resistor, R1
+Vab2 = V * ( (RV ./ (R1 + RV)) - (R4 ./ (R3 + R4)) ); % Variable Resistor, R2
+
+% Plot both variable resistor graphs vs the voltage across
+% NumberTitle off hides the Figure number in the window title
+figure('Name','Variable Resistance','NumberTitle','off');
+subX = 2;
+subY = 1;
+subplot(subX, subY, 1); % 2x1 Grid for Subplots. Subplot 1
+plot(RV, Vab1);
+title('Variable R1 vs Voltage across A and B');
+xlabel('R1 (Ohms)');
+ylabel('vAB (Volts)');
+
+subplot(subX, subY, 2); % 2x1 Grid for Subplots. Subplot 2
+plot(RV, Vab2);
+title('Variable R2 vs Voltage across A and B');
+xlabel('R2 (Ohms)');
+ylabel('vAB (Volts)');
+
+%% Part 2: Semiconductor
+% Clear the console from part 1
+clc;
+Is = 10.^(-12);       % Saturation Current
+q = 1.6 .* 10.^(-19); % Elementary Charge Value
+k = 1.38 .*10^(-23);  % Boltzmann’s Constant
+
+% Prompt for a voltage drop from the user
+Vd = input('Enter a voltage drop from 0.2 and 3.0 volts: ');
+if(Vd < 0.2 || Vd > 3.0)
+    error('Please enter a value in between 0.2 and 3.0!');
+end
+
+% Calculate the current
+[Vd, Y] = meshgrid(0:.025:Vd, 290:2:320);
+I = Is .* ((exp((q*Vd) ./ (k*Y)) - 1));
+
+% Generate a 3D grid from the given values
+figure('Name','Semiconductor','NumberTitle','off');
+mesh(Vd, Y, I);
+title('Voltage Drop vs Temperature vs Current');
+xlabel('Voltage Drop (Volts)');
+ylabel('Temperature (Kelvin)');
+zlabel('Current (Amps)');
+
+##### SOURCE END #####
+--></body></html>

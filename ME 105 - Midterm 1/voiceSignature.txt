@@ -1,0 +1,108 @@
+Acceptance criteria for the word 3
+Mean:        -0.00178
+Deviation:   +0.07729
+Variance:    +0.00597
+Magnitude:   +0.04077
+Zero:        +167.00000
+Acceptance criteria for the word 4
+Mean:        -0.00178
+Deviation:   +0.07192
+Variance:    +0.00517
+Magnitude:   +0.03415
+Zero:        +202.00000
+Acceptance criteria for the word 5
+Mean:        -0.00182
+Deviation:   +0.06072
+Variance:    +0.00369
+Magnitude:   +0.02794
+Zero:        +262.00000
+Acceptance criteria for the word 3
+Mean:        -0.00178
+Deviation:   +0.07729
+Variance:    +0.00597
+Magnitude:   +0.04077
+Zero:        +167.00000
+Acceptance criteria for the word 4
+Mean:        -0.00178
+Deviation:   +0.07192
+Variance:    +0.00517
+Magnitude:   +0.03415
+Zero:        +202.00000
+Acceptance criteria for the word 5
+Mean:        -0.00182
+Deviation:   +0.06072
+Variance:    +0.00369
+Magnitude:   +0.02794
+Zero:        +262.00000
+Acceptance criteria for the word 3
+Mean:        -0.00178
+Deviation:   +0.07729
+Variance:    +0.00597
+Magnitude:   +0.04077
+Zero:        +167.00000
+Acceptance criteria for the word 4
+Mean:        -0.00178
+Deviation:   +0.07192
+Variance:    +0.00517
+Magnitude:   +0.03415
+Zero:        +202.00000
+Acceptance criteria for the word 5
+Mean:        -0.00182
+Deviation:   +0.06072
+Variance:    +0.00369
+Magnitude:   +0.02794
+Zero:        +262.00000
+Acceptance criteria for the word 3
+Mean:        -0.00178
+Deviation:   +0.07729
+Variance:    +0.00597
+Magnitude:   +0.04077
+Zero:        +167.00000
+Acceptance criteria for the word 4
+Mean:        -0.00178
+Deviation:   +0.07192
+Variance:    +0.00517
+Magnitude:   +0.03415
+Zero:        +202.00000
+Acceptance criteria for the word 5
+Mean:        -0.00182
+Deviation:   +0.06072
+Variance:    +0.00369
+Magnitude:   +0.02794
+Zero:        +262.00000
+Acceptance criteria for the word 3
+Mean:        -0.00178
+Deviation:   +0.07729
+Variance:    +0.00597
+Magnitude:   +0.04077
+Zero:        +167.00000
+Acceptance criteria for the word 4
+Mean:        -0.00178
+Deviation:   +0.07192
+Variance:    +0.00517
+Magnitude:   +0.03415
+Zero:        +202.00000
+Acceptance criteria for the word 5
+Mean:        -0.00182
+Deviation:   +0.06072
+Variance:    +0.00369
+Magnitude:   +0.02794
+Zero:        +262.00000
+Acceptance criteria for the word 3
+Mean:        -0.00178
+Deviation:   +0.07729
+Variance:    +0.00597
+Magnitude:   +0.04077
+Zero:        +167.00000
+Acceptance criteria for the word 4
+Mean:        -0.00178
+Deviation:   +0.07192
+Variance:    +0.00517
+Magnitude:   +0.03415
+Zero:        +202.00000
+Acceptance criteria for the word 5
+Mean:        -0.00182
+Deviation:   +0.06072
+Variance:    +0.00369
+Magnitude:   +0.02794
+Zero:        +262.00000

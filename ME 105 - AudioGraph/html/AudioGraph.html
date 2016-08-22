@@ -1,0 +1,325 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>AudioGraph</title><meta name="generator" content="MATLAB 8.4"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2015-03-04"><meta name="DC.source" content="AudioGraph.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><pre class="codeinput"><span class="comment">%{
+</span><span class="comment">    Name:       AudioGraph
+</span><span class="comment">    Desc:       Reads, calculates and plots audio files. The output from
+</span><span class="comment">                the command window and workspace variables are saved for
+</span><span class="comment">                later use in othre programs.
+</span><span class="comment">
+</span><span class="comment">    Author:     Christopher Simon
+</span><span class="comment">    Version:    1.0
+</span><span class="comment">
+</span><span class="comment">    Created:    3/3/2015
+</span><span class="comment">    Modified:   3/3/2015
+</span><span class="comment">%}
+</span><span class="keyword">function</span> AudioGraph()
+    <span class="comment">% For each wav file as iteration i</span>
+    <span class="keyword">for</span> i = 1:3
+        <span class="comment">% Set the current fileName and respective nbLabel</span>
+        <span class="comment">% to the corresponding values in the case list</span>
+        <span class="keyword">switch</span> i
+            <span class="keyword">case</span> 1
+                fileName = <span class="string">'eight.wav'</span>;
+                nbLabel = <span class="string">'EIGHT'</span>;
+            <span class="keyword">case</span> 2
+                fileName = <span class="string">'nine.wav'</span>;
+                nbLabel = <span class="string">'NINE'</span>;
+            <span class="keyword">case</span> 3
+                fileName = <span class="string">'zero.wav'</span>;
+                nbLabel = <span class="string">'ZERO'</span>;
+        <span class="keyword">end</span>
+
+        <span class="comment">% Read the wav file into a data array</span>
+        <span class="comment">% As a note, the wave files provided are 64kbps</span>
+        [audioData, ~] = audioread(fileName);
+
+        <span class="comment">% Calculate the audioData</span>
+        calculate(nbLabel, audioData);
+        fprintf(<span class="string">'\n'</span>);
+
+        <span class="comment">% Draw the plot</span>
+
+        <span class="comment">% X and Y coordinates for the subplots</span>
+        <span class="comment">% X represents each index of the data array</span>
+        <span class="comment">% Y represents the raw data in the audio file</span>
+        x = 1:length(audioData);
+        y = audioData;
+        <span class="comment">% Subplot i on a 3x1 grid of subplots</span>
+        subplot(3, 1, i);
+        <span class="comment">% The subplot plot data</span>
+        plot(x, y);
+        <span class="comment">% Title and axis labels</span>
+        title(fileName);
+        xlabel(<span class="string">'Index'</span>);
+        ylabel(<span class="string">'Frequency'</span>);
+    <span class="keyword">end</span>
+
+<span class="comment">%{
+</span><span class="comment">    Calculate the data from a given array
+</span><span class="comment">    Save and print the results of the calculations
+</span><span class="comment">    to .mat and .txt files respectivly
+</span><span class="comment">%}
+</span><span class="keyword">function</span> calculate(nb, audioData)
+    <span class="comment">% Mean</span>
+    me = mean(audioData);
+    <span class="comment">% Standard Deviation</span>
+    de = std(audioData);
+    <span class="comment">% Variance</span>
+    va = std(audioData) .^ 2;
+    <span class="comment">% Average Power</span>
+    ap = mean(audioData .^ 2);
+    <span class="comment">% Average Magnitude</span>
+    am = mean(abs(audioData));
+
+    <span class="comment">% Save the calculated data to a .mat file.</span>
+    <span class="comment">% Content must be saved in unique files so that all</span>
+    <span class="comment">% calculations are saved as opposed to only</span>
+    <span class="comment">% the last calculation values in one file</span>
+    matFile = sprintf(<span class="string">'%s.mat'</span>, nb);
+    save(matFile);
+
+    <span class="comment">% Print the data</span>
+    print(nb, me, de, va, ap, am);
+
+<span class="comment">%{
+</span><span class="comment">    Print the status of the data
+</span><span class="comment">    nb - Number Label
+</span><span class="comment">    me - Mean
+</span><span class="comment">    de - Deviation
+</span><span class="comment">    va - Variance
+</span><span class="comment">    ap - Avg Power
+</span><span class="comment">    am - Avg Magnitude
+</span><span class="comment">%}
+</span><span class="keyword">function</span> print(nb, me, de, va, ap, am)
+    <span class="comment">% Status Messages</span>
+	<span class="comment">% Messages are padded with 2 zeros (0) in front</span>
+	<span class="comment">% and are truncated at five decimal places.</span>
+	<span class="comment">% This is why +02.5float is used for formatting</span>
+    uText = <span class="string">'Utterance of the word %s\n'</span>;
+    mText = <span class="string">'Mean:        %+02.5f\n'</span>;
+    dText = <span class="string">'Deviation:   %+02.5f\n'</span>;
+    vText = <span class="string">'Variance:    %+02.5f\n'</span>;
+    pText = <span class="string">'Power:       %+02.5f\n'</span>;
+    gText = <span class="string">'Magnitude:   %+02.5f\n'</span>;
+
+    <span class="comment">% Open a file handler with append+ privileges</span>
+    fh = fopen(<span class="string">'voiceSignature.txt'</span>, <span class="string">'a+'</span>);
+    <span class="comment">% Print the messages and their passed values</span>
+    <span class="comment">% to a file and the command window</span>
+    <span class="comment">% For each print source, fh and the command window, as incrament i</span>
+    <span class="comment">% See fprintf for command window as 1</span>
+    <span class="keyword">for</span> i = [fh, 1]
+        fprintf(i, uText, nb);
+        fprintf(i, mText, me);
+        fprintf(i, dText, de);
+        fprintf(i, vText, va);
+        fprintf(i, pText, ap);
+        fprintf(i, gText, am);
+    <span class="keyword">end</span>
+</pre><pre class="codeoutput">Utterance of the word EIGHT
+Mean:        -0.00102
+Deviation:   +0.07712
+Variance:    +0.00595
+Power:       +0.00595
+Magnitude:   +0.03385
+
+Utterance of the word NINE
+Mean:        -0.00206
+Deviation:   +0.07968
+Variance:    +0.00635
+Power:       +0.00635
+Magnitude:   +0.04345
+
+Utterance of the word ZERO
+Mean:        -0.00218
+Deviation:   +0.08356
+Variance:    +0.00698
+Power:       +0.00699
+Magnitude:   +0.04555
+
+</pre><img vspace="5" hspace="5" src="AudioGraph_01.png" alt=""> <p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2014b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%{
+    Name:       AudioGraph
+    Desc:       Reads, calculates and plots audio files. The output from
+                the command window and workspace variables are saved for
+                later use in othre programs.
+
+    Author:     Christopher Simon
+    Version:    1.0
+
+    Created:    3/3/2015
+    Modified:   3/3/2015
+%}
+function AudioGraph()
+    % For each wav file as iteration i
+    for i = 1:3
+        % Set the current fileName and respective nbLabel
+        % to the corresponding values in the case list
+        switch i
+            case 1
+                fileName = 'eight.wav';
+                nbLabel = 'EIGHT';
+            case 2
+                fileName = 'nine.wav';
+                nbLabel = 'NINE';
+            case 3
+                fileName = 'zero.wav';
+                nbLabel = 'ZERO';
+        end
+        
+        % Read the wav file into a data array
+        % As a note, the wave files provided are 64kbps
+        [audioData, ~] = audioread(fileName);
+
+        % Calculate the audioData
+        calculate(nbLabel, audioData);
+        fprintf('\n');
+        
+        % Draw the plot
+        
+        % X and Y coordinates for the subplots
+        % X represents each index of the data array
+        % Y represents the raw data in the audio file
+        x = 1:length(audioData);
+        y = audioData;
+        % Subplot i on a 3x1 grid of subplots
+        subplot(3, 1, i);
+        % The subplot plot data
+        plot(x, y);
+        % Title and axis labels
+        title(fileName);
+        xlabel('Index');
+        ylabel('Frequency');
+    end
+    
+%{
+    Calculate the data from a given array
+    Save and print the results of the calculations
+    to .mat and .txt files respectivly
+%}
+function calculate(nb, audioData)
+    % Mean
+    me = mean(audioData);
+    % Standard Deviation
+    de = std(audioData);
+    % Variance
+    va = std(audioData) .^ 2;
+    % Average Power
+    ap = mean(audioData .^ 2);
+    % Average Magnitude
+    am = mean(abs(audioData));
+    
+    % Save the calculated data to a .mat file.
+    % Content must be saved in unique files so that all
+    % calculations are saved as opposed to only
+    % the last calculation values in one file
+    matFile = sprintf('%s.mat', nb);
+    save(matFile);
+    
+    % Print the data
+    print(nb, me, de, va, ap, am);
+        
+%{ 
+    Print the status of the data
+    nb - Number Label
+    me - Mean
+    de - Deviation
+    va - Variance
+    ap - Avg Power
+    am - Avg Magnitude
+%}
+function print(nb, me, de, va, ap, am)
+    % Status Messages
+	% Messages are padded with 2 zeros (0) in front
+	% and are truncated at five decimal places.
+	% This is why +02.5float is used for formatting
+    uText = 'Utterance of the word %s\n';
+    mText = 'Mean:        %+02.5f\n';
+    dText = 'Deviation:   %+02.5f\n';
+    vText = 'Variance:    %+02.5f\n';
+    pText = 'Power:       %+02.5f\n';
+    gText = 'Magnitude:   %+02.5f\n';
+    
+    % Open a file handler with append+ privileges
+    fh = fopen('voiceSignature.txt', 'a+');
+    % Print the messages and their passed values
+    % to a file and the command window
+    % For each print source, fh and the command window, as incrament i
+    % See fprintf for command window as 1
+    for i = [fh, 1]
+        fprintf(i, uText, nb);
+        fprintf(i, mText, me);
+        fprintf(i, dText, de);
+        fprintf(i, vText, va);
+        fprintf(i, pText, ap);
+        fprintf(i, gText, am);
+    end
+##### SOURCE END #####
+--></body></html>
