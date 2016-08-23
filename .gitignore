@@ -11,6 +11,9 @@
 ## EXE Files
 #*.exe
 
+##desktop.ini
+desktop.ini
+
 #############################################################
 
 ## Ignore Visual Studio temporary files, build results, and
